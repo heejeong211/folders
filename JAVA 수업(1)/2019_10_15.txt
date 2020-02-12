@@ -1,0 +1,167 @@
+1. ++a 전위연산자 : 항상 그 문장이 실행하기 전에 실행됨. 
+   a++ 후위연산자 : 항상 그 문장이 실행하고 나서 실행됨.
+
+*대입연산자 : 항상 다른 연산자보다 우선 순위가 낮음
+
+2. 어떻게 문자열의 길이를 알 수 있나?
+    - 문자열의 끝을 알 수 있나? 
+      =>문자열을 끝은 '\0'(널 NULL 문자)로 끝난다.
+  
+  public static int length(String s) {
+      int count= 0;
+      if (s != null) {
+        try {
+        while(s.charAt(count) != '\0')
+           count++;
+       } catch (IndexOutOfBoundsException ex) {
+         System.out.println("this is not abnormal"); 
+   }
+       return count;
+}
+
+3. 제너릭타입을 사용한 거... //자바 컬렉션이 다 제너릭 컬렉션으로 되어 있음.
+
+    public interface List<T extends Object> {
+
+	void addHead(T data);
+	void addTail(T data);
+	
+	void removeHead();
+	void removeTail();
+	
+	void insertAt(int index, T data);
+	void removeAt(int index);
+	
+	T getAt(int index);
+}
+
+------------------------------------------
+HashMap, HashSet은 hash함수를 사용한다.
+
+*Map
+맵은 key 와 value(데이터)로 이루어져있음
+키를 통해 벨뉴를 찾아감
+맵은 항상 연산 한번으로 데이터를 얻기 때문에 Big O(1)이다.
+강사님꺼에서 Hash의 쓰임새는 키를 주소로 만들어 주는 역할을 함.
+
+*Hash(클래스) 32바이트값
+16진수 값으로 어떤 데이터 값을 숫자(해쉬벨뉴)로 만들어 주는 역할
+보통은 위조 여부나 보안 등으로 쓰임
+자바의 모든 객체는 해쉬값을 가지고 있음
+
+*Set
+Map이랑 비슷하게 겹쳐지는 것을 허용안함. 
+여기서 해쉬를 사용한 이유는 해쉬값을 비교하기 위해서임.
+만약에 여기서 세트에 정수가 아닌 스트링(문자열)이 들어가면
+문자열을 비교하는 것이 매우 어렵기 때문에 해쉬를 사용한 것임.
+비교자체는 해쉬가 빠른데 이게 느릴 수 있음. 해쉬값을 만들어낼때가 느림.
+
+------------------------------------------
+1. 어떻게 문자열의 길이를 알 수 있나?
+    - 문자열의 끝을 알 수 있나? 
+      =>문자열을 끝은 '\0'(널 NULL 문자)로 끝난다.
+
+2. for(Element item : <Collection>) => 다른 언어의 foreach 와 같다.
+
+3. HashMap, HashSet은 hash함수를 사용한다.
+
+4. Object 클래스는 객체의 해쉬 값을 계산하는 hashCode라는 멤버함수를 가지고 있다.
+
+*Object 클래스의 equals라는 함수는 hashCode를 사용하여 객체가 같은 값을 같지는 검사
+
+*****5. Object 클래스의 equals 함수를 재정의 할 경우, 다음의 사항을 고려한다.*****
+   - 같은 레퍼런스를 가지는 경우, 항상 ture
+   - 같은 클래스에서 상속받고, 같은 컨텐츠를 가지고 있는 경우(일반적으로 hashCode 함수 사용), 항상 ture
+   - 이외에는 항상 false
+
+class Item {
+    @Override
+    public boolean equals(Object o) { //업캐스팅해서 온 Object일 것이다.
+      if(this == o) { //this 와 o 가 같은 의미는 같은 레퍼런스이기 때문.
+        return true;
+    } else if (o instanceof Item) { //instanceof 연산자. 어떤 객체가 이 클래스로 부터 상속 받았으면 참 아니면 거짓
+                                          상속받지 않으면 아무리 해쉬값이 같아도 그건 같은 것이 아님.
+         return this.hashCode() == o.hashCode(); 
+    }
+      return false;
+   }
+}
+
+*캐스팅 연산자 : 타입을 바뀌는 것
+*업캐스팅 : 자식클래스가 파생된 클래스에서 부모클래스로 바뀌는 것. 이것은 자연스러운것
+ 다형성 구현할 때 shape에서 line 한거
+*다운캐스팅 : 자식 타입으로 가는 것 그때 instanceof를 사용해서 확인하고 해야함.
+
+--------------------------------------------
+
+*clone();
+*equals();
+*finalize();
+*hashCord();
+
+--------------------------------------------
+
+1. 매일 각 반의 수강생들의 출석여부를 관리할 수 있도록 출석부를 만드시오.
+  - 수강생 (Student)
+  - 출결 (Attandance)
+  - 날짜 (Date)
+
+  Map<Date, AttandanceList> dailyAttendances; // key is Date.
+
+ class Attendance { 
+     Student student;
+     boolean isAttendance;
+  }
+   
+  class AttendanceList {
+     Date date;
+     List<Attendance> attendances;
+  }
+//만약에 여기서 반을 더 추가한다면 key가 더 생길 수도 있음.
+
+2. 과별 학생 목록을 관리 하시오.
+   - 학생 (Student)
+   - 과 (Department)
+  
+  class Student { 
+    Department department; 
+  }
+
+  class Department {
+   List<Student> students; //역참조, '어떤 학생이 어떤 과 이다'라는 정보로 찾음(DB).
+  }
+//자바는 어떤식으로 하든 구현에 관심이 없음. 그렇게 따지면 추상화 클래스나 interface로 가지고 있어도 됨.
+//구체적으로 설계 하면 할수록 데이터가 불일치할 가능성이 있음.
+
+----------------------------------------------------------
+
+****숙제 
+
+이름과 성을 수정하는 콘솔 프로그램 작성
+모든 화면은 무한 루프에 있어야 함
+
+*기본 화면
+성 : 홍
+이름  : 길동
+
+1. 성씨 수정
+2. 이름 수정
+x. 종료
+입력 : 
+
+*수정화면
+현재 : 길동
+수정 :
+
+s. 저장
+c. 취소
+예외일때는 위에꺼 루프
+
+Scanner
+System.out.format
+System.exit
+
+
+금요일 시험 10문제.....
+
+

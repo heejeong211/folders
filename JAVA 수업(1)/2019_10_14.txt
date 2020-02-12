@@ -1,0 +1,106 @@
+1. 객체지향의 3요소
+상속성
+부모로 부터 멤버를 물려받는 것
+구현상속과 인터페이스상속
+멤버함수의 선언만 상속
+구현상속은 멤버함수의 구현을 물려받는 것
+다형성
+객체의 따라서 동작되는 구현하는 메소드가 다른 것
+상속받은 하위 클래스에서 부모의 메소드(함수) 오버라이드 한 것
+은닉성
+구현된 형태를 외부로 부터 감추는 것
+외부에서 내부 데이터를 직접적으로 조작하지 못하는 것(접근제어자)
+
+2. 논리연산자 나열
+&& || ! 
+
+and 와 or 이항연산자
+not은 true와 false가 결과값
+
+3. if (scores >= 90)
+        grade = 'A';
+   else if (scores >= 80)
+        grade = 'B';
+   else if
+        grade = 'F';
+
+플로티 형이면 스위치문으로는 못 바꿈
+하지만 정수형이면 할 수도 있고 없을 수도 있음
+(max가 100이 아니면 불가능)
+
+4. stack 클래스의 정의
+(push pop top isEmpty) interface, 추상화클래스 경우
+ 
+이건 공책에......ㅎ 
+
+5. '0' ~ '9' 문자로 구성된 숫자열을 정수형으로 바꾸는 함수작성
+(for 문으로, parseInt(String str)를 사용해서 결과가 int로 나오게끔)
+
+//case 1, str = null
+//case 2, str = "  "
+//case 3, str = "  12 3  "
+//case 4, str = "12x34"
+  public static Integer parseInt(String str) throws Exception {
+        if (str == null)
+            throw new NullPointException();
+
+        str.trim();
+        if(str.isEmpty()) // 관리되는 문자가 하나도 없다면 밑에 예외처리를 해라
+          throw new NumberFormatException("Invalid number format");
+     
+        int number = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (!Character.isDigit(ch)) { //위에 case들을 걸러줌, 숫자 문자가 아니라면 예외처리 발생해라
+                return null;
+              throw new NumberFormatException("Invalid number format");
+            } else {
+                number = number * 10 + (ch - '0');
+            }
+        }
+        return number;
+    }
+}
+
+----------------------------------------------------------------------
+
+1. enum(열거형)을 사용하는 경우와 열거형이 아닌 타입을 사용하는 경우 비교
+String gender;
+gender = "Female" or gener = "Male" or gender = "Third"
+->열거형이 아닌 타입은 값의 의미나 값의 정의를 실행시간에 벨리데이션코드를 넣어줘야한다.
+대소문자 구별 해야함.
+
+enum Gender {FEMALE, MALE}; //내가 적어놓은 값만의 의미를 가짐. 
+Gender gender;
+gender = Gender.FEMALE or gender = Gender.MALE
+->열거형을 사용하면 실행시간에 항상 같은 값이 들어온다는 것을 보장함.
+값의 체크를 컴파일 타임에 할 수 있음. 값의 범위가 제한되어있을 때 사용.
+대소문자 구별 안 해도 됨.
+ex)도로명주소,지번주소
+
+-------------------------------------------------------------------
+
+*인터페이스를 사용하는 이유
+
+인터페이스를 구현하는 환경이 서로 다를 경우 인터페이스만
+잘 정의해도 환경이 달라도 구현할 수 있음.(인터페이스=근본)
+
+--------------------------------------------------------------------
+
+*(struct) class 
+
+현실의 어떤 문제를 수치화(데이터화) 하는 것을 모델링 
+
+--------------------------------------------------------------------
+
+*자료구조
+선형              비선형
+Stack              Tree
+List                Graph
+Queue
+Hash    
+
+
+
+
+
