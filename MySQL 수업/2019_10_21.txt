@@ -1,0 +1,225 @@
+-SQL이란
+ 데이터 베이스랑 통신하거나 자료를 수정하거나 삭제하거나 등등 자료처리 방법은 SQL언어라고 
+ 한다. MySQL이랑 오라클이랑 언어가 비슷하다. 데이터베이스에 접근하거나 변경할 때 사용되는
+ 언어.
+
+- 기능
+데이터베이스에 대한 쿼리
+데이터베이스로 부터 데이터를 받아오거나, 입력하거나, 수정하거나, 삭제할 수 있다. =>crud기능
+새로운 데이터베이스, 스키마, 테이블, 프로시져, 뷰를 만드록 권한을 정할 수 있다.
+
+*쿼리
+쿼리는 테이블에 입력된 자료에서 사용자가 원하는 정보를 추출하거나 새로운 
+형태로 원하는 결과를 만들어내는 것을 말합니다.  쿼리에 종류는 여러가지로 있습니다. 
+업데이트 쿼리, 삭제 쿼리, 추가쿼리 크로스탭쿼리, 불일치쿼리, 매개변수쿼리 등등 
+
+-RDBMS
+관계형 데이터베이스 관리 시스템
+관계형 데이터베이스는 테이블이란 객체로 데이터를 저장을 한다.
+데이터는 행(column)과 열(row)로 이루어져있다.
+column은 해당 테이블에 어떤 종류의 데이터가 있는지
+row는 column에 맞추어 입력된 개별의 데이터 한줄을 뜻한다.
+
+*강의중엔 MySQL을 사용
+엑셀도 마이에스큐엘식
+
+*제약조건
+
+*관리를 위한 id 보통은 int라고 한다.
+ id는 무조건 테이블안에 들어가야 한다.
+ 입력날짜와 수정날짜가 중요함.
+
+-SQL 문법
+SQL의 키워드는 대소문자를 구분하지 않는다. 하지만 키워드는 주로 대문자로만 작성한다.(약속임)
+EX) SELECT * FROM board;
+SQL 쿼리문의 제일 마지막에는 세미콜론(;)을 붙인다.
+
+*캐릭터 인코딩
+영어 1바이트 한글 2바이트
+프로그램을 만든나라 미국, 그래서 알파벳은 문제 없음
+한글은 2바이트라 문제임
+윈도우즈 EUCKR, MS949 => 이것이 캐릭터 인코딩임.
+얘네 기업에서 자체적으로 만든 자체 표준이지 세계 표준이 아님
+외국에서 한국사이트 접속할 때 글자가 깨짐.
+MS949로 글자 깨짐. UTF-8파일로 세팅해야 어디에 코딩을 올리건 간에 안깨짐.
+
+*포트(port) 번호 3306
+포트(Port) 번호는 TCP와 UDP가 상위 계층에 제공하는 주소 표현 방식이다.
+
+*무차별 대입(해킹)
+
+*desc 테이블명;
+테이블을 보여달라는 명령어.
+
+-SCHEMA란?
+마이에스큐엘 등의 현대 데이터베이스 에서 data>row>table>schema>database 규모가 커짐.
+스키마이름
+
+* 스키마
+데이터 베이스의 기본 개념으로서 데이터 베이스가 대상으로 하는 실세계를 논의 영역
+(universe of discourse),논의 영역에서 데이터 베이스에 필요한 정보를 추상화하는 모델을
+데이터 모델(data model), 추상한 결과를 기술한 것을 개념 스키마(conceptual schema)라고 한다.
+
+-SCHEMA안에서 필요한 테이블을 만들어서 데이터를 관리해주어야 한다.
+테이블은 일종의 자바 클래스라고 볼 수도 있다.
+테이블에 들어갈 데이터 종류와 이름을 미리 정해놓고 거기에 맞추어 이제 로우가 입력되거나 출력된다.
+- CREATE TABLE 테이블이름(
+ 컬럼이름1데이터타입,
+ 컬럼이름2데이터타입,
+.....
+);
+
+-자바와 마찬가지로 마이에스큐엘에는 다양한 데이터타입이 존재한다.
+크게 나주자면 문자형, 숫자형, 날짜형 으로 나뉜다.
+문자형
+기본적으로 varchar(255)(SIZE)로 선언한다. SIZE는 바이트 크기를 뜻한다.
+만약 많은 양의 text가 필요한 경우에는 TEXT나 LONGTEXT 데이터타입을 사용하게 된다.
+숫자형 
+INT,FLOAT이 있다. signed와 unsigned를 만들어 줄 수 있는데 signed는 - 가 붙는 대신 표현 범위가
+절반이 되고 unsigned는 0부터 표현이 된다.
+날짜형
+DATE,TIME,DATETIME 을 주로 사용한다. DATE는 년월일, TIME 시분초, DATETIME은 연월일시시분초를
+표시하게 된다.
+
+-DROP은 스키마나 테이블을 삭제할 때 사용된다.
+DROP 스카마이름; or DROP 테이블이름;
+또한 다음에 배우게 될 
+
+-ALTER
+테이블에 변경을 해야하는 시점이 있다.
+예를 들어 새로운 column을 추가하거나 다음에 배울 constraints를 추가 하는 경우
+그럴 경우에는 ALTER TABLE을 이용해서 테이블 구조에 변경을 할 수 있다.
+ALTER TABLE 테이블이름
+ADD 컬럼이름 데이터타임 -> 새 컬럼 추가
+ALTER TABLE 테이블이름
+DROP COLUMN 컬럼이름 -> 컬럼 삭제
+ALTER TABLE 테이블이름
+MODIFY COLUMN 컬럼이름 데이터타입 -> 해당 컬럼 데이터타입 변경
+
+*무결성
+데이터의 결성이 있다.
+이름이 널인 사람.
+
+*DESC/SHOW의 차이
+DESC는 테이블 구조를 보여달라 디스크라이브 정렬 디센던트(내림차순)
+SHOW는 내용물을 보여달라 데이터베이스랑 테이블이 뭐가 잇는 목록을 보여달라
+
+-CONSTRANINS(제약조건)
+테이블의 컬럼에 여러가지 제약조건을 만들어줄 수 있다.
+대표적으론 NOT NULL CONSTRAINT이 있다.
+해당 constraint 을 통해서 테이블의 데이터에 대한 유효성을 보장할 수 있다.
+CREATE TABLE 테이블이름(
+컬럼이름 데이터타입 constraint 종류
+NOT NULL, UNIQUE, PRIMATY KEY, FOREIGN KEY, DEFAULT
+
+-NOT NULL constraint 은 해당 컬럼에 NULL값을 금지시킨다.
+-UNIQUE 은 해당 컬럼의 값들이 중복되지 않아야 한다.
+-PRIMATY KEY는 NOT NULL, UNIQUE가 같이 적용되는 constraint라고 볼 수 있다. 
+즉 NULL 밸류가 들어올 수 없고 중복되어서도 안된다.
+주로 id에 PRIMARY KEY가 추가된다.
+-FOREIGN KEY은 해당 컬럼을 다른 테이블의 컬럼과 연결을 시킨다.
+주로 정보테이블과 실제 테이브을 연결 시킬 때 사용이 된다.
+예를 들어 예약 테이블에는 회원의 이름이나 아이디가 들어가는게 아니라 회원번호만
+FOREIGN KEY로 잡아주면 된다.
+-DEFAULT는 해당 컬럼의 기본값을 설정한다.
+만약 아무런 값이 입력이 되지 않으면 해당 DEFAULT 값이 자동으로 입력된다.
+
+-AUTO INCREMENT
+AUTO INCREMENT는 정수형 컬럼의 값을 자동으로 1씩 증가 시켜주는 기능이다.
+이 기능이 필요한 이유는 회원번호, 글 번호 등을 프로그래밍 할 때 개발자가 직겁 넣어주느넥 아니라
+데이터베이스 상에서 간단하게 관리가 가능하기 때문이다.
+AUTO INCREMENT는 주로 PRIMATY KEY column에 붙게 된다.
+CREATE TABLE 테이블이름(
+id int PRIMARY KEY AUTO_INCREMENT,
+ .....
+);
+또한 시작 숫자를 변경하고 싶다면
+CREATE TABLE 테이블이름 AUTO_INCREMENT = 바꿀 숫자 입력
+
+-명령어
+CRUD
+Create, Retrieve Update Delete
+생성 불러오기 수정 삭제
+모든 쿼리는 이 4가지 분류 중의 하나
+
+-SELECT
+SELECT 는 가장 대표적인 retrieve query 이다.
+SELECT*FROM boards;
+여기서 '*'은 모든 column을 불러오라는 의미다
+만약 특정 필드만 불러오고 싶다면
+SELECT boards.id boards.title boards.content FROM boards;
+boards. 은 생략 가능 하다.
+
+-SELECT DISTINCT
+SELECT의 경우에는 필드를 선택할 때 데잍터가 겹치면 그대로 다 가져온다.
+하지만 만약 한 필드에서 명확하게 다른 데이터들만 불러오고 싶다면?
+SELECT DISTINCT title FROM BOARDS;
+이렇게 하면 title이 다른 데이터들만 불러와 진다.
+여러개의 필드를 넣을 경우에는 row에서 data의 필드들이 다 중복되지 않는 결과가 불러와 진다.
+
+-WHERE = IF(자바)
+WHERE 는 조건을 줄 때 사용된다.
+SELECT * FROM boards WHERE id = 1;
+이 쿼리를 실행할 경우 id 가 1인 row만 불러와 진다.
+WHERE의 경우 SELECT 뿐만이 아닌 DELETE, UPDATD등에서도 사용된다.
+DELETE FROM boards를 실행하면? 모든 데이터가 테이블에서 삭제된다.
+UPDATE 도 마찬가지.
+
+WHERE에는 다름과 같은 조건이 들어갈 수 있다.
+= > < >= <= <> BETWEEN LIKE IN
+<> 는 자바에서 !=
+
+-INSERT INTO
+INSERT INTO는 CREATE 카테고리 쿼리로써 테이블에 데이터를 입력할 때 사용된다.
+
+*WHERE 카테고리 검색 때 쓰임 네이버 월요웹툰
+
+-LIKE 와 wildcards
+SQL에서 WHERE 의 조건에서 LIKE 란 keyword를 사용해서 다양하게 검색하거나 조건을 지정할 수 있다.
+LIKE에는 wildcard라는 특수문자를 사용해야 원하는 결과를 얻을 수 있다.
+
+-Wildcard에는 다음 문자열들이 있다
+%, _
+
+-Aliase
+잠시 임시로 별명 지어주는 것.
+
+-NULL인지 체크할 때 IS NULL과 IS NOT NULL를 이용.
+
+-논리연산자 글자 그대로 입력
+
+-UPDATE
+
+- SELECT COUNT(*) FROM city;
+로우가 몇개 인지 세어달라는 의미
+
+-LIMIT 숫자
+상위 숫자 만큼만 보여줌.
+
+-정렬
+오름차순
+SELECT * FROM CITY ORDER BY Population LIMIT 10;
+내림차순
+SELECT * FROM CITY ORDER BY Population DESC LIMIT 10;
+
+-JOIN
+여러 테이블을 연결하여 한개의 큰 임시 테이블로 보여는 것
+종류 left, right, inner(cross)
+
+members
+id name age nullable
+
+rserv
+id memberId manager
+
+left 하면 members, right 하면 rserv, cross 하려면 둘 다 있어야 함.
+
+*SELECT * FROM 은 특이하게도 LIMIT를 0부터 1000까지 자동으로 잡는다.
+
+*Workbench에서는 DELETE FROM members; 해도 안지워짐. 에러 뜸.
+(UPDATE, SET이런것도 안됨.)
+
+*고급지게 비밀번호 바꾸는 법(해쉬코드)
+UPDATE members
+SET password = SHA2("123", 256) ->SHA2 256 혹은 512 바이트
+WHERE id = 1;

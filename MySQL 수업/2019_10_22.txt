@@ -1,0 +1,205 @@
+*주소가 굳이 자세한 정보를 가지고 있지 않아도 됨.
+왜냐하면 다른 테이블이 있으니까.
+
+*GROUP BY
+해당 컬럼의 값이 다양하게 있는데 그걸로 그룹을 만들어 주는 것이다.
+예를 들면, 
+4        4 
+4        5
+5        7
+4   => 6
+7
+7
+6
+5
+
+*ORDER BY
+숫자형 컬럼에 걸게 되면 작은 순 부터 큰수대로(오름차순)
+DESC 큰 수 순으로 작은 수 까지(내림차순)
+글자형 알파벳 혹은 한글은 오름차순 내림차순으로 정렬
+
+*근데 난 제일 많이 나오는 순서대로 정렬하고 싶고 또 count(*)이 아닌 저 카운트가 의미하는게
+뭔지 알고 싶을 때
+ex)
+SELECT rental_duration, count(*) AS 비디오개수 FROM sakila.film
+GROUP BY rental_duration;
+
+*다중 조인
+교집합인 INNER JOIN을 해야함
+ex)
+SELECT film.title, actor.first_name, actor.last_name
+FROM sakila.film_actor
+INNER JOIN film ON film_actor.film_id = film.film_id
+INNER JOIN actor ON film_actor.actor_id = actor.actor_id;
+
+*COUNT() -> 열(row)의 개수 세기
+SUM() -> 합 구하기
+AVG() -> 평균 구하기
+MIN() -> 최솟값 구하기
+MAX() -> 최댓값 구하기
+
+------------------------------------------------------------------------
+
+*연습문제
+
+1. 배우의 이름을 last_name 알파벳 내림차순 10명을 보여주세요.
+SELECT * FROM sakila.actor ORDER BY last_name DESC LIMIT 10;
+
+2. 영화의 이름과 카테고리 내용을 보여주세요.
+SELECT film.title, category.name AS category FROM film_category
+INNER JOIN film ON film_category.film_id = film.film_id
+INNER JOIN category ON category.category_id = film_category.category_id;
+
+3. 고객 중에 휴면 회원들을 모두 보여주세요.(active 가 0)
+SELECT customer.first_name, customer.last_name FROM customer
+WHERE active = 0;
+
+4. 영화를 대여기간(rental_duration) 순으로 오름차순 정렬하세요.
+SELECT * FROM sakila.film ORDER BY rental_duration (ASC);
+
+5. 영화를 대여료(rental_rate) 순으로 내림차순 정렬하세요.
+SELECT * FROM sakila.film ORDER BY rental_rate DESC;
+
+6. 영화 title 이나 description 중 개(dog)가 나오는 것을 모두 보여주세요.
+SELECT * FROM film
+WHERE title LIKE '%dog%'
+OR description LIKE '%dog%';
+
+7. 영화 중 release_year 가 2000년 이전에 나온 영화들을 모두 보여주세요.
+SELECT film.release_year FROM sakila.film WHERE release_year <= 2000;
+
+8. 필름 액터 테이블로 페넬로페 귀네스가 나온 영화의 제목들을 출력해주세요.
+SELECT film.title, actor.first_name, actor.last_name
+FROM sakila.film_actor
+INNER JOIN film ON film_actor.film_id = film.film_id
+INNER JOIN actor ON film_actor.actor_id = actor.actor_id
+WHERE actor.first_name = 'PENELOPE' AND actor.last_name = 'GUINESS';
+
+SELECT film.title FROM film_actor
+INNER JOIN film ON film_actor.film_id = file.film_id
+WHERE actor_id = 1;
+
+9. 가장 많은 영화에 출연한 배우의 성과 이름과 출연한 영화의 갯수를 출력해주세요.
+SELECT actor.first_name, actor.last_name, count(film_id) FROM film_actor
+INNER JOIN actor ON film_actor.actor_id = actor.actor_id
+GROUP BY film_actor.actor_id
+ORDER BY count(film_id) DESC LIMIT 1;
+
+10. 회원 번호와 그 회원이 대여료를 총 얼마 냈는지 보여주세요.
+SELECT customer_id, SUM(amount) FROM payment
+GROUP BY customer_id;
+
+11. 1번 store가 가지고 있는 총 비디오의 갯수를 보여주세요.
+SELECT COUNT(*) FROM sakila.inventory
+WHERE store_id = 1;
+
+12. 1번 store가 가지고 있는 영화와 해당 영화의 비디오 갯수를 보여주세요.
+SELECT film.title, COUNT(inventory_id) FROM sakila.inventory
+INNER JOIN film ON film.film_id = inventory.film_id
+WHERE store_id =1
+GROUP BY inventory.film_id;
+
+13. 영화의 제목과 카테고리를 텍스트로 보여주세요.
+SELECT film.title, category.name FROM sakila.film_category
+INNER JOIN sakila.film ON film_category.film_id = film.film_id
+INNER JOIN sakila.category ON film_category.category_id = category.category_id;
+
+14. 도시와 해당 국가를 보여주세요.
+SELECT city_id, city, country.country FROM city  
+INNER JOIN country ON city.country_id = country.country_id
+ORDER BY city_id;
+
+15. 고객 중 미국에 살고 있는 회원의 이름과 이메일을 보여주세요.
+SELECT first_name, last_name, email FROM customer
+INNER JOIN address ON customer.address_id = address.address_id
+INNER JOIN city ON address.city_id = city.city_id
+WHERE city.country_id = 103;
+
+16. 영화 중 대여횟수가 가장 많은 영화의 이름을 보여주세요.
+SELECT title, COUNT(*) FROM rental
+INNER JOIN inventory ON rental.inventory_id = inventory.inventory_id
+INNER JOIN film ON inventory.film_id = film.film_id
+GROUP BY inventory.film_id
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+
+17. 영화 중 대여기간이 4일 미만이고 주연의 이름이 JOHNNY LOLLOBRIGIDA 
+이고 비디오 부록에 예고편이 있는 영화의 제목을 보여주세요.
+
+SELECT * FROM film
+INNER JOIN film_actor ON film.film_id = film_actor.film_id
+INNER JOIN actor ON film_actor.actor_id = actor.actor_id
+WHERE rental_duration < 4 
+AND actor.first_name = "JOHNNY"
+AND actor.last_name = "LOLLOBRIGIDA"
+AND special_features LIKE "%Trailers%";
+
+SELECT * FROM film
+INNER JOIN film_actor ON film.film_id = film_actor.film_id
+WHERE rental_duration < 4 
+AND film_actor.actor_id =
+(SELECT actor_id FROM actor
+WHERE first_name = 'JOHNNY' AND last_name = 'LOLLOBRIGIDA')
+AND special_features LIKE "%Trailers%";
+
+18. 직원 중 Mike Hillyer가 LINDA WILLIAMS 에게 대여해준
+영화의 제목, 대여일, 반납일을 보여주세요.
+SELECT title, rental_date, return_date FROM film
+INNER JOIN inventory ON film.film_id = inventory.film_id
+INNER JOIN rental ON inventory.inventory_id = rental.inventory_id
+WHERE rental.staff_id = (SELECT staff_id FROM staff
+WHERE staff.first_name = "Mike" AND staff.last_name = "Hillyer")
+AND
+rental.customer_id = (SELECT customer_id FROM customer 
+WHERE customer.first_name = "LINDA" AND customer.last_name = "WILLIAMS");
+
+19. 영화의 이름과 출연한 배우의 숫자를 배우의 숫자로 내림차순해서 보여주되 
+출연한배우의 숫자 컬럼의 이름을 출연배우수로 만들어 보여세요.
+SELECT title, count(*) AS 출연배우수 FROM film_actor
+INNER JOIN film ON film_actor.film_id = film.film_id
+GROUP BY film_actor.film_id
+ORDER BY count(*) DESC;
+
+SELECT film.title, COUNT(film_actor.actor_id) AS 출연배우수
+FROM film_actor
+INNER JOIN film ON film_actor.film_id = film.film_id
+GROUP BY film_actor.film_id
+ORDER BY COUNT(film_actor.actor_id) DESC;
+
+20. 회원의 이름, 빌린 비디오의 숫자, 빌린 비디오 대여점의 주소, 
+회원의 거주 도시를 회원 번호순으로 정렬하여 보여주세요.
+SELECT customer.first_name, customer.last_name, COUNT(*), address.address FROM rental
+INNER JOIN customer ON rental.customer_id = customer.customer_id
+INNER JOIN staff ON rental.staff_id = staff.staff_id
+INNER JOIN store ON staff.store_id = store.store_id
+INNER JOIN address ON store.address_id = address.address_id
+GROUP BY rental.customer_id
+ORDER BY customer.customer_id;
+
+=> 이렇게 하면 customer 중에 store가 달라서 같은 id를 쓰는 customer가 있기
+때문에...........ㅎㅎ (걍 넘어감.......ㅎ)
+
+------------------------------------------------------------------------------
+
+*try, catch, finally 쓰는 이유
+
+public class Ex01 {
+	public static void main(String[] args) {
+		Connection conn = null;
+		try {
+		    System.out,println("작업도전")
+			System.out.println("abc".equals(conn.toString()));
+		} catch(NullPointerException e) {
+		   e.printStackTrace();	
+		} finally {
+			System.out.println("여기서 마지막으로 마무리 작업");
+		}
+	}
+
+}
+
+try, catch, finally 입센션이 발생할 수 있는 코드들을 막아주는 애들. 
+예) http://www.naver.com/546946443212128785
+이런 식으로 네이버에서 주소 잘못 치면 404에러로 예외처리 하는 것.
+
+
